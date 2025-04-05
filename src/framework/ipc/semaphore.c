@@ -1,5 +1,5 @@
 #include "semaphore.h"
-#include "../utils/logging.h"
+#include "utils/logging.h"
 
 #include <sys/ipc.h>
 #include <sys/sem.h>
