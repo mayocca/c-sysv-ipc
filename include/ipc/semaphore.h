@@ -1,7 +1,9 @@
 #ifndef SEMAPHORE_H
 #define SEMAPHORE_H
 
-int create_semaphore();
+#include <sys/types.h>
+
+int create_semaphore(key_t key, int value);
 
 int wait_semaphore(int semid, int semnum);
 

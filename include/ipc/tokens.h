@@ -9,6 +9,6 @@
  * Create a token via ftok
  * @return: The token
  */
-key_t tok_create();
+key_t tok_create(void);
 
 #endif

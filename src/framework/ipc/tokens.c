@@ -1,9 +1,10 @@
 #include "ipc/tokens.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ipc.h>
 
-key_t tok_create()
+key_t tok_create(void)
 {
     key_t key;
 
