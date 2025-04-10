@@ -1,39 +1,22 @@
 #include "fs/files.h"
 #include <stdio.h>
 
-int openFile(int size, char *filename) {
-  /*fopen
-  freopen
-  open
-  creat
-  */
-  return 0;
+FILE *open_file(const char *path, const char *mode)
+{
+  return fopen(path, mode);
 }
 
-int readFile(char *buffer, int size, char *filename) {
-  /*
-  fscanf
-  fread
-
-  fgets
-  fgetc
-  */
-  return 0;
+size_t read_file(FILE *file, char *buffer, size_t size)
+{
+  return fread(buffer, 1, size, file);
 }
 
-int writeFile(char *buffer, int size, char *filename) {
-  /*
-   *fprintf
-  // fwrite
-  //
-  // fputs
-  // fputc
-  */
-  return 0;
+size_t write_file(FILE *file, char *buffer, size_t size)
+{
+  return fwrite(buffer, 1, size, file);
 }
 
-int closeFile(char *filename) {
-  /*fclose
-  close*/
-  return 0;
+int close_file(FILE *file)
+{
+  return fclose(file);
 }

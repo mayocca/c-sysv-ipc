@@ -6,8 +6,9 @@
 #define PROJECT_ID 1337
 
 /**
- * Create a token via ftok
- * @return: The token
+ * @brief Create a token for IPC mechanisms
+ *
+ * @return key_t Valid token on success, -1 on error
  */
 key_t tok_create(void);
 

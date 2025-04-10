@@ -11,8 +11,7 @@ key_t tok_create(void)
     key = ftok("/bin/ls", PROJECT_ID);
     if (key == -1)
     {
-        perror("ftok");
-        exit(1);
+        return -1;
     }
 
     return key;

@@ -1,41 +1,44 @@
 #ifndef _FILES_H
 #define _FILES_H
 
+#include <stdio.h>
+#include <stddef.h>
+
 /**
  * @brief Open a file
  *
- * @param size Size of the file
- * @param filename Name of the file
- * @return int File descriptor
+ * @param path Path to the file (must not be NULL)
+ * @param mode Mode to open the file (must not be NULL)
+ * @return FILE* File descriptor on success, NULL on failure
  */
-int openFile(int size, char *filename);
+FILE *open_file(const char *restrict path, const char *restrict mode);
 
 /**
- * @brief Read a file
+ * @brief Read from a file into a buffer
  *
- * @param buffer Buffer to store the file
- * @param size Size of the file
- * @param filename Name of the file
- * @return int Number of bytes read
+ * @param file File descriptor (must not be NULL)
+ * @param buffer Buffer to store the file contents (must not be NULL)
+ * @param size Size of the buffer in bytes
+ * @return size_t Number of bytes read on success, 0 on EOF, (size_t)-1 on error
  */
-int readFile(char *buffer, int size, char *filename);
+size_t read_file(FILE *restrict file, char *restrict buffer, size_t size);
 
 /**
- * @brief Write a file
+ * @brief Write a buffer to a file
  *
- * @param buffer Buffer to write to the file
- * @param size Size of the file
- * @param filename Name of the file
- * @return int Number of bytes written
+ * @param file File descriptor (must not be NULL)
+ * @param buffer Buffer containing data to write (must not be NULL)
+ * @param size Number of bytes to write
+ * @return size_t Number of bytes written on success, (size_t)-1 on error
  */
-int writeFile(char *buffer, int size, char *filename);
+size_t write_file(FILE *restrict file, const char *restrict buffer, size_t size);
 
 /**
  * @brief Close a file
  *
- * @param filename Name of the file
- * @return int File descriptor
+ * @param file File descriptor (must not be NULL)
+ * @return int 0 on success, EOF on error
  */
-int closeFile(char *filename);
+int close_file(FILE *file);
 
 #endif
