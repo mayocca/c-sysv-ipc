@@ -63,4 +63,4 @@ int log_cleanup(void);
 #define log_info(msg) log_message(LOG_LEVEL_INFO, __FILE__, __LINE__, (msg))
 #define log_debug(msg) log_message(LOG_LEVEL_DEBUG, __FILE__, __LINE__, (msg))
 
-#endif /* _LOG_H */
+#endif

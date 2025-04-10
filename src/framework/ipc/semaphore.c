@@ -23,20 +23,22 @@ int create_semaphore(key_t key, int value, int flags)
 
 int wait_semaphore(int semid, unsigned short semnum, int flags)
 {
-    struct sembuf op = {
-        .sem_num = semnum,
-        .sem_op = -1,
-        .sem_flg = flags};
+    struct sembuf op;
+
+    op.sem_num = semnum;
+    op.sem_op = -1;
+    op.sem_flg = flags;
 
     return semop(semid, &op, 1);
 }
 
 int signal_semaphore(int semid, unsigned short semnum, int flags)
 {
-    struct sembuf op = {
-        .sem_num = semnum,
-        .sem_op = 1,
-        .sem_flg = flags};
+    struct sembuf op;
+
+    op.sem_num = semnum;
+    op.sem_op = 1;
+    op.sem_flg = flags;
 
     return semop(semid, &op, 1);
 }

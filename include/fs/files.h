@@ -11,7 +11,7 @@
  * @param mode Mode to open the file (must not be NULL)
  * @return FILE* File descriptor on success, NULL on failure
  */
-FILE *open_file(const char *restrict path, const char *restrict mode);
+FILE *open_file(const char *path, const char *mode);
 
 /**
  * @brief Read from a file into a buffer
@@ -21,7 +21,7 @@ FILE *open_file(const char *restrict path, const char *restrict mode);
  * @param size Size of the buffer in bytes
  * @return size_t Number of bytes read on success, 0 on EOF, (size_t)-1 on error
  */
-size_t read_file(FILE *restrict file, char *restrict buffer, size_t size);
+size_t read_file(FILE *file, char *buffer, size_t size);
 
 /**
  * @brief Write a buffer to a file
@@ -31,7 +31,7 @@ size_t read_file(FILE *restrict file, char *restrict buffer, size_t size);
  * @param size Number of bytes to write
  * @return size_t Number of bytes written on success, (size_t)-1 on error
  */
-size_t write_file(FILE *restrict file, const char *restrict buffer, size_t size);
+size_t write_file(FILE *file, char *buffer, size_t size);
 
 /**
  * @brief Close a file

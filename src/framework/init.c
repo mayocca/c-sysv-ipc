@@ -1,6 +1,7 @@
 #include "framework/init.h"
 #include "log/log.h"
 #include "ipc/tokens.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -130,7 +131,6 @@ int framework_init_with_options(const framework_options_t *options)
     if (getcwd(cwd, sizeof(cwd)))
     {
         log_info("Framework initialized successfully");
-        log_debug("Working directory: %s", cwd);
     }
 
     is_initialized = 1;

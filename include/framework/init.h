@@ -53,4 +53,4 @@ int framework_cleanup(void);
  */
 int framework_get_default_options(framework_options_t *options);
 
-#endif /* _FRAMEWORK_INIT_H */
+#endif
