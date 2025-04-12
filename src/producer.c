@@ -15,9 +15,10 @@
 void setup(void);
 void loop(void);
 void produce_random_order(order_t *order);
+void write_order_to_file(order_t *order);
 
-FILE *file;
 int semid;
+char *file_path;
 
 int main(int argc, char *argv[])
 {
@@ -53,25 +54,19 @@ int main(int argc, char *argv[])
 void setup(void)
 {
     /* Variables */
-    char *file_path;
     key_t key;
 
     /* Get file path from environment */
     file_path = env_get("FILE_PATH", "/tmp/medication.dat");
 
     /* Create file if it doesn't exist */
-    file_open(file_path, "w");
-
-    log1("File path: %s", file_path);
-
-    file = file_open(file_path, "w");
-    if (file == NULL)
+    if (file_open(file_path, "w") == NULL)
     {
-        log1("Failed to open file: %s", file_path);
+        log0("Failed to open file");
         exit(EXIT_FAILURE);
     }
 
-    log0("File opened");
+    log1("File path: %s", file_path);
 
     /* Create semaphore */
     key = token_create(file_path);
@@ -102,22 +97,16 @@ void loop(void)
 {
     order_t *order = malloc(sizeof(order_t));
 
-    /* Wait for semaphore */
-    semaphore_wait(semid);
-
     /* Produce orders */
     produce_random_order(order);
 
     log2("Produced order: %c %s", order->type, order->wants_dessert ? "with dessert" : "without dessert");
 
     /* Write order to file */
-    file_write(file, order, sizeof(order_t), 1);
+    write_order_to_file(order);
 
     /* Free order */
     free(order);
-
-    /* Signal semaphore */
-    semaphore_signal(semid);
 }
 
 void produce_random_order(order_t *order)
@@ -125,4 +114,25 @@ void produce_random_order(order_t *order)
     order->processed = false;
     order->type = menu_type_char[rand_int(0, MENU_TYPE_COUNT - 1)];
     order->wants_dessert = rand_bool(0.5);
+}
+
+void write_order_to_file(order_t *order)
+{
+    FILE *file;
+
+    /* Wait for semaphore */
+    semaphore_wait(semid);
+
+    file = file_open(file_path, "a");
+    if (file == NULL)
+    {
+        log0("Failed to open file");
+        exit(EXIT_FAILURE);
+    }
+
+    file_write(file, order, sizeof(order_t), 1);
+    file_close(file);
+
+    /* Signal semaphore */
+    semaphore_signal(semid);
 }
