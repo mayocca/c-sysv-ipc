@@ -12,8 +12,8 @@ src_dir := ./src
 framework_dir := ./src/framework
 restaurant_dir := ./src/restaurant
 
-framework_srcs := $(wildcard $(framework_dir)/**/*.c)
-restaurant_srcs := $(restaurant_dir)/utils.c
+framework_srcs := $(shell find $(framework_dir) -type f -name '*.c')
+restaurant_srcs := $(shell find $(restaurant_dir) -type f -name '*.c')
 
 all: producer consumer
 
