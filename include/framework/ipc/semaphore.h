@@ -12,6 +12,14 @@
 int semaphore_create(key_t key);
 
 /**
+ * @brief Initializes a semaphore set
+ *
+ * @param semid Semaphore set identifier
+ * @return int  0 on success, -1 on error
+ */
+int semaphore_init(int semid);
+
+/**
  * @brief Performs a wait (P) operation on a semaphore
  *
  * @param semid Semaphore set identifier

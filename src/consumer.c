@@ -1,11 +1,14 @@
-#include "framework/os/env.h"
+#include "framework/foundation/init.h"
 #include "framework/ipc/semaphore.h"
 #include "framework/ipc/tokens.h"
+#include "framework/os/env.h"
 #include "framework/utils/logging.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+
+void work(char consumer_type, char *file_path);
 
 int main(int argc, char *argv[])
 {
@@ -21,9 +24,20 @@ int main(int argc, char *argv[])
     consumer_type = *argv[1];
     file_path = env_get("FILE_PATH", "/tmp/medication.dat");
 
-    log1("Consumer started: %c", consumer_type);
+    framework_init();
 
-    log1("File path: %s", file_path);
+    work(consumer_type, file_path);
 
     return EXIT_SUCCESS;
+}
+
+/**
+ * @brief Entry point for the consumer
+ *
+ * This function is the entry point for the consumer. It will read the file and process the orders.
+ */
+void work(char consumer_type, char *file_path)
+{
+    log1("Consumer type: %c", consumer_type);
+    log1("File path: %s", file_path);
 }

@@ -1,4 +1,5 @@
 #include "framework/ipc/semaphore.h"
+#include "framework/utils/logging.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,13 +11,18 @@ int semaphore_create(key_t key)
 
     if (semid == -1)
     {
-        perror("Failed to create semaphore");
+        log0("Failed to create semaphore");
         exit(EXIT_FAILURE);
     }
 
+    return semid;
+}
+
+int semaphore_init(int semid)
+{
     if (semctl(semid, 0, SETVAL, 1) == -1)
     {
-        perror("Failed to initialize semaphore");
+        log0("Failed to initialize semaphore");
         exit(EXIT_FAILURE);
     }
 

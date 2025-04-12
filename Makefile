@@ -9,13 +9,16 @@ CFLAGS := -ansi \
          -O3
 
 src_dir := ./src
+framework_dir := ./src/framework
+
+framework_srcs := $(wildcard $(framework_dir)/**/*.c)
 
 all: producer consumer
 
-producer: $(src_dir)/producer.c $(src_dir)/framework/os/env.c $(src_dir)/framework/ipc/semaphore.c $(src_dir)/framework/ipc/tokens.c $(src_dir)/framework/utils/logging.c
+producer: $(src_dir)/producer.c $(framework_srcs)
 	$(CC) $(CFLAGS) -o $@ $^
 
-consumer: $(src_dir)/consumer.c $(src_dir)/framework/os/env.c $(src_dir)/framework/ipc/semaphore.c $(src_dir)/framework/ipc/tokens.c $(src_dir)/framework/utils/logging.c
+consumer: $(src_dir)/consumer.c $(framework_srcs)
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
