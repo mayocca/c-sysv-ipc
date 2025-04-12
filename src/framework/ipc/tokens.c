@@ -1,17 +1,18 @@
-#include "ipc/tokens.h"
+#include "framework/ipc/tokens.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ipc.h>
 
-key_t tok_create(void)
+key_t tok_create(const char *path)
 {
     key_t key;
 
-    key = ftok("/bin/ls", PROJECT_ID);
+    key = ftok(path, PROJECT_ID);
     if (key == -1)
     {
-        return -1;
+        perror("Failed to create token");
+        exit(EXIT_FAILURE);
     }
 
     return key;

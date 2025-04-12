@@ -2,8 +2,6 @@
 #define SEMAPHORE_H
 
 #include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/sem.h>
 
 /**
  * @brief Creates or gets a System V semaphore set
@@ -42,14 +40,5 @@ int signal_semaphore(int semid, unsigned short semnum, int flags);
  * @return int    0 on success, -1 on error
  */
 int destroy_semaphore(int semid);
-
-/**
- * @brief Gets the current value of a semaphore
- *
- * @param semid   Semaphore set identifier
- * @param semnum  Semaphore number in the set (0-based)
- * @return int    Semaphore value on success, -1 on error
- */
-int get_semaphore_value(int semid, unsigned short semnum);
 
 #endif
