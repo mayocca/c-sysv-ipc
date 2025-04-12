@@ -5,7 +5,7 @@
 #include "framework/ipc/tokens.h"
 #include "framework/utils/logging.h"
 #include "framework/utils/rand.h"
-#include "restaurant/types.h"
+#include "restaurant/utils.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     {
         loop();
 
-        sleep(1);
+        sleep(2);
     }
 
     return EXIT_SUCCESS;
@@ -57,7 +57,7 @@ void setup(void)
     key_t key;
 
     /* Get file path from environment */
-    file_path = env_get("FILE_PATH", "/tmp/medication.dat");
+    file_path = env_get("FILE_PATH", "/tmp/menu.dat");
 
     /* Create file if it doesn't exist */
     if (file_open(file_path, "w") == NULL)
@@ -100,7 +100,7 @@ void loop(void)
     /* Produce orders */
     produce_random_order(order);
 
-    log2("Produced order: %c %s", order->type, order->wants_dessert ? "with dessert" : "without dessert");
+    log2("Produced order: %c %s", menu_type_to_char(order->type), order->wants_dessert ? "with dessert" : "without dessert");
 
     /* Write order to file */
     write_order_to_file(order);
@@ -111,9 +111,8 @@ void loop(void)
 
 void produce_random_order(order_t *order)
 {
-    order->processed = false;
-    order->type = menu_type_char[rand_int(0, MENU_TYPE_COUNT - 1)];
-    order->wants_dessert = rand_bool(0.5);
+    order->type = rand_int(0, MENU_TYPE_COUNT - 1);
+    order->wants_dessert = (rand_int(0, 100) < 50);
 }
 
 void write_order_to_file(order_t *order)

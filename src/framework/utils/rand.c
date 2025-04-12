@@ -10,10 +10,5 @@ void rand_init(void)
 
 int rand_int(int min, int max)
 {
-    return min + rand() % (max - min + 1);
-}
-
-bool rand_bool(float probability)
-{
-    return rand() < probability * RAND_MAX;
+    return min + rand() % (max - min);
 }
