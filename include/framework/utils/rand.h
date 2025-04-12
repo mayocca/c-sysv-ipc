@@ -1,8 +1,7 @@
 #ifndef __FRAMEWORK_UTILS_RAND_H
 #define __FRAMEWORK_UTILS_RAND_H
 
-#include <stdlib.h>
-
+#include <stdbool.h>
 /**
  * @brief Initialize the random number generator
  *
@@ -19,5 +18,14 @@ void rand_init(void);
  * @return int Random integer between min and max
  */
 int rand_int(int min, int max);
+
+/**
+ * @brief Generate a random boolean
+ *
+ * @param probability Probability of true
+ *
+ * @return bool Random boolean
+ */
+bool rand_bool(float probability);
 
 #endif

@@ -4,6 +4,8 @@
 #include "framework/ipc/semaphore.h"
 #include "framework/ipc/tokens.h"
 #include "framework/utils/logging.h"
+#include "framework/utils/rand.h"
+#include "restaurant/types.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +14,7 @@
 
 void setup(void);
 void loop(void);
+void produce_random_order(order_t *order);
 
 FILE *file;
 int semid;
@@ -27,7 +30,15 @@ int main(int argc, char *argv[])
 
     framework_init();
 
+    log0("================================================");
+    log0("Producer setup");
+    log0("================================================");
+
     setup();
+
+    log0("================================================");
+    log0("Producer loop");
+    log0("================================================");
 
     while (1)
     {
@@ -89,5 +100,29 @@ void setup(void)
 
 void loop(void)
 {
-    log0("Producing...");
+    order_t *order = malloc(sizeof(order_t));
+
+    /* Wait for semaphore */
+    semaphore_wait(semid);
+
+    /* Produce orders */
+    produce_random_order(order);
+
+    log2("Produced order: %c %s", order->type, order->wants_dessert ? "with dessert" : "without dessert");
+
+    /* Write order to file */
+    file_write(file, order, sizeof(order_t), 1);
+
+    /* Free order */
+    free(order);
+
+    /* Signal semaphore */
+    semaphore_signal(semid);
+}
+
+void produce_random_order(order_t *order)
+{
+    order->processed = false;
+    order->type = menu_type_char[rand_int(0, MENU_TYPE_COUNT - 1)];
+    order->wants_dessert = rand_bool(0.5);
 }
