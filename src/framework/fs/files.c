@@ -1,4 +1,5 @@
 #include "framework/fs/files.h"
+#include "framework/utils/logging.h"
 
 FILE *file_open(const char *path, const char *mode)
 {
@@ -6,7 +7,7 @@ FILE *file_open(const char *path, const char *mode)
 
   if (file == NULL)
   {
-    perror("Failed to open file");
+    log0("Failed to open file");
     return NULL;
   }
 
@@ -15,28 +16,20 @@ FILE *file_open(const char *path, const char *mode)
 
 size_t file_read(FILE *file, void *buffer, size_t size, size_t items)
 {
-  size_t bytes_read = fread(buffer, size, items, file);
-
-  if (bytes_read != items)
-  {
-    perror("Failed to read file");
-    return 0;
-  }
-
-  return bytes_read;
+  return fread(buffer, size, items, file);
 }
 
 size_t file_write(FILE *file, const void *buffer, size_t size, size_t items)
 {
-  size_t bytes_written = fwrite(buffer, size, items, file);
+  size_t items_written = fwrite(buffer, size, items, file);
 
-  if (bytes_written != items)
+  if (items_written != items)
   {
-    perror("Failed to write file");
+    log0("Failed to write file");
     return 0;
   }
 
-  return bytes_written;
+  return items_written;
 }
 
 int file_close(FILE *file)
@@ -45,7 +38,7 @@ int file_close(FILE *file)
 
   if (status == EOF)
   {
-    perror("Failed to close file");
+    log0("Failed to close file");
     return -1;
   }
 

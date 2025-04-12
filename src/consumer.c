@@ -99,8 +99,6 @@ void loop(void)
     order_t *order = malloc(sizeof(order_t));
     int order_count = 0, dessert_count = 0, total_price;
 
-    log1("Checking for orders of type %c", menu_type);
-
     /* Wait for semaphore */
     semaphore_wait(semid);
 
@@ -135,5 +133,5 @@ void loop(void)
 
     total_price = order_count * menu_type_price(menu_type) + dessert_count * DESSERT_PRICE;
 
-    log4("Total for type %c: $%d (orders: %d, desserts: %d)", menu_type, total_price, order_count, dessert_count);
+    log4("Total for type %c: $%d (orders: %d, desserts: %d)", menu_type_to_char(menu_type), total_price, order_count, dessert_count);
 }
