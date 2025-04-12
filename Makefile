@@ -1,17 +1,17 @@
 CC := gcc
-CFLAGS := -ansi -pedantic-errors -Wall -Wextra -Werror -I./include
+CFLAGS := -ansi -pedantic-errors -Wall -Wextra -Werror -I./include -O3
 
 src_dir := ./src
 
 all: producer consumer
 
-producer: $(src_dir)/producer/main.c $(src_dir)/framework/args/env.c $(src_dir)/framework/ipc/semaphore.c $(src_dir)/framework/ipc/tokens.c $(src_dir)/framework/utils/logging.c
+producer: $(src_dir)/producer.c $(src_dir)/framework/os/env.c $(src_dir)/framework/ipc/semaphore.c $(src_dir)/framework/ipc/tokens.c $(src_dir)/framework/utils/logging.c
 	$(CC) $(CFLAGS) -o $@ $^
 
-consumer: $(src_dir)/consumer/main.c $(src_dir)/framework/args/env.c $(src_dir)/framework/ipc/semaphore.c $(src_dir)/framework/ipc/tokens.c $(src_dir)/framework/utils/logging.c
+consumer: $(src_dir)/consumer.c $(src_dir)/framework/os/env.c $(src_dir)/framework/ipc/semaphore.c $(src_dir)/framework/ipc/tokens.c $(src_dir)/framework/utils/logging.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	@rm -rf $(build_dir)
+	@rm -rf producer consumer
 
 .PHONY: all clean

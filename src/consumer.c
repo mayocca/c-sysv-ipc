@@ -19,9 +19,9 @@ int main(int argc, char *argv[])
 
     file_path = env_get("FILE_PATH", "/tmp/medication.dat");
 
-    LOG("Consumer started");
+    log0("Consumer started");
 
-    LOG(file_path);
+    log1("File path: %s", file_path);
 
     return EXIT_SUCCESS;
 }

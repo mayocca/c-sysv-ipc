@@ -1,7 +1,7 @@
 #ifndef __FRAMEWORK_IPC_TOKENS_H
 #define __FRAMEWORK_IPC_TOKENS_H
 
-#include <sys/types.h>
+#include <sys/ipc.h>
 
 #define PROJECT_ID 1337
 

@@ -1,8 +1,11 @@
 #ifndef __FRAMEWORK_UTILS_LOGGING_H
 #define __FRAMEWORK_UTILS_LOGGING_H
 
-#define LOG(message) log_message(message, __FILE__, __func__, __LINE__)
+#define log0(format) log_message(__FILE__, __func__, __LINE__, format)
+#define log1(format, arg1) log_message(__FILE__, __func__, __LINE__, format, arg1)
+#define log2(format, arg1, arg2) log_message(__FILE__, __func__, __LINE__, format, arg1, arg2)
+#define log3(format, arg1, arg2, arg3) log_message(__FILE__, __func__, __LINE__, format, arg1, arg2, arg3)
 
-void log_message(const char *message, const char *file, const char *function, int line);
+void log_message(const char *file, const char *function, int line, const char *format, ...);
 
 #endif
