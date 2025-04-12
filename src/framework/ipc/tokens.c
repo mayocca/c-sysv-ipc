@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <sys/ipc.h>
 
-key_t tok_create(const char *path)
+key_t token_create(const char *path)
 {
     key_t key;
 

@@ -1,6 +1,6 @@
 #include "framework/fs/files.h"
 
-FILE *open_file(const char *path, const char *mode)
+FILE *file_open(const char *path, const char *mode)
 {
   FILE *file = fopen(path, mode);
 
@@ -13,7 +13,7 @@ FILE *open_file(const char *path, const char *mode)
   return file;
 }
 
-size_t read_file(FILE *file, void *buffer, size_t size, size_t items)
+size_t file_read(FILE *file, void *buffer, size_t size, size_t items)
 {
   size_t bytes_read = fread(buffer, size, items, file);
 
@@ -26,7 +26,7 @@ size_t read_file(FILE *file, void *buffer, size_t size, size_t items)
   return bytes_read;
 }
 
-size_t write_file(FILE *file, const void *buffer, size_t size, size_t items)
+size_t file_write(FILE *file, const void *buffer, size_t size, size_t items)
 {
   size_t bytes_written = fwrite(buffer, size, items, file);
 
@@ -39,7 +39,7 @@ size_t write_file(FILE *file, const void *buffer, size_t size, size_t items)
   return bytes_written;
 }
 
-int close_file(FILE *file)
+int file_close(FILE *file)
 {
   int status = fclose(file);
 

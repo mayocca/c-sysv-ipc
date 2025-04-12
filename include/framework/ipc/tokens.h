@@ -1,5 +1,5 @@
-#ifndef TOKENS_H
-#define TOKENS_H
+#ifndef __FRAMEWORK_IPC_TOKENS_H
+#define __FRAMEWORK_IPC_TOKENS_H
 
 #include <sys/types.h>
 
@@ -11,6 +11,6 @@
  * @param path Path to the file used to create the token
  * @return key_t Valid token on success, -1 on error
  */
-key_t tok_create(const char *path);
+key_t token_create(const char *path);
 
 #endif
