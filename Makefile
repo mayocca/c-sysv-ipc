@@ -1,5 +1,12 @@
 CC := gcc
-CFLAGS := -ansi -pedantic-errors -Wall -Wextra -Werror -I./include -O3
+CFLAGS := -ansi \
+         -pedantic-errors \
+         -Wall \
+         -Wextra \
+         -Werror \
+         -D_SVID_SOURCE \
+         -I./include \
+         -O3
 
 src_dir := ./src
 

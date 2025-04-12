@@ -6,7 +6,6 @@
 
 int semaphore_create(key_t key)
 {
-    union semun arg;
     int semid = semget(key, 1, IPC_CREAT | 0666);
 
     if (semid == -1)
@@ -15,8 +14,7 @@ int semaphore_create(key_t key)
         exit(EXIT_FAILURE);
     }
 
-    arg.val = 1;
-    if (semctl(semid, 0, SETVAL, arg) == -1)
+    if (semctl(semid, 0, SETVAL, 1) == -1)
     {
         perror("Failed to initialize semaphore");
         exit(EXIT_FAILURE);

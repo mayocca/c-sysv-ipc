@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/ipc.h>
 
 key_t token_create(const char *path)
 {
