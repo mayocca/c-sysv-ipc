@@ -1,17 +1,17 @@
-all : # Canonical target
-BUILD := debug
-build_dir := ./build/${BUILD}
+CC := gcc
+CFLAGS := -ansi -pedantic-errors -Wall -Wextra -Werror -I./include
 
-framework_srcs := $(wildcard ./src/framework/*.c)
-framework_objs := $(framework_srcs:./src/framework/%.c=$(build_dir)/%.o)
-
-CFLAGS = -ansi -pedantic-errors -Wall -Wextra -Werror -g
+src_dir := ./src
 
 all: producer consumer
 
-producer
+producer: $(src_dir)/producer/main.c $(src_dir)/framework/args/env.c $(src_dir)/framework/ipc/semaphore.c $(src_dir)/framework/ipc/tokens.c $(src_dir)/framework/utils/logging.c
+	$(CC) $(CFLAGS) -o $@ $^
 
-framework: $(framework_objs)
-	@$(CC) -o $@ $^ $(CFLAGS)
+consumer: $(src_dir)/consumer/main.c $(src_dir)/framework/args/env.c $(src_dir)/framework/ipc/semaphore.c $(src_dir)/framework/ipc/tokens.c $(src_dir)/framework/utils/logging.c
+	$(CC) $(CFLAGS) -o $@ $^
 
-.PHONY: clean all
+clean:
+	@rm -rf $(build_dir)
+
+.PHONY: all clean

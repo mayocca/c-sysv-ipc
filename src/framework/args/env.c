@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-char *env_get(const char *key, const char *default_value)
+char *env_get(const char *key, char *default_value)
 {
     char *value = getenv(key);
     if (value == NULL)

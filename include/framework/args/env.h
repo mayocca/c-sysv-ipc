@@ -8,6 +8,6 @@
  * @param default_value Default value to return if the environment variable is not set
  * @return char* Value of the environment variable, default value if not set
  */
-char *env_get(const char *key, const char *default_value);
+char *env_get(const char *key, char *default_value);
 
 #endif

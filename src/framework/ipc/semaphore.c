@@ -1,6 +1,7 @@
 #include "framework/ipc/semaphore.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/sem.h>
 
 int semaphore_create(key_t key)

@@ -72,3 +72,6 @@ cmake-build-debug
 
 # MacOS
 .DS_Store
+
+# Build directory
+build/
