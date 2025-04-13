@@ -35,7 +35,7 @@ typedef struct
  * @brief Convert a character to a menu type
  *
  * @param c The character to convert
- * @return menu_type_t The menu type
+ * @return menu_type_t The menu type or MENU_TYPE_COUNT if the character is invalid
  */
 menu_type_t menu_type_from_char(char c);
 
@@ -43,7 +43,7 @@ menu_type_t menu_type_from_char(char c);
  * @brief Convert a menu type to a character
  *
  * @param type The menu type
- * @return char The character
+ * @return char The character or '\0' if the menu type is invalid
  */
 char menu_type_to_char(menu_type_t type);
 
@@ -51,7 +51,7 @@ char menu_type_to_char(menu_type_t type);
  * @brief Get the description of a menu type
  *
  * @param type The menu type
- * @return char* The description of the menu type
+ * @return char* The description of the menu type or NULL if the menu type is invalid
  */
 const char *menu_type_description(menu_type_t type);
 
@@ -59,7 +59,7 @@ const char *menu_type_description(menu_type_t type);
  * @brief Get the price of a menu type
  *
  * @param type The menu type
- * @return int The price of the menu type
+ * @return int The price of the menu type or -1 if the menu type is invalid
  */
 int menu_type_price(menu_type_t type);
 

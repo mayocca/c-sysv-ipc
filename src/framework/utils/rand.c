@@ -5,7 +5,7 @@
 
 void rand_init(void)
 {
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
 }
 
 int rand_int(int min, int max)

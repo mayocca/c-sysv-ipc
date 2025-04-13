@@ -4,6 +4,19 @@ CFLAGS := -ansi \
          -Wall \
          -Wextra \
          -Werror \
+         -Wcast-align \
+         -Wconversion \
+         -Wformat \
+         -Wformat-security \
+         -Wimplicit-fallthrough \
+         -Wmissing-declarations \
+         -Wmissing-prototypes \
+         -Wnull-dereference \
+         -Wpointer-arith \
+         -Wredundant-decls \
+         -Wshadow \
+         -Wstrict-prototypes \
+         -Wuninitialized \
          -D_SVID_SOURCE \
          -I./include \
          -O3

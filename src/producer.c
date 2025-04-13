@@ -16,6 +16,8 @@
 
 void setup(void);
 void loop(void);
+void cleanup(int signum);
+
 void produce_random_order(order_t *order);
 void write_order_to_file(order_t *order);
 
@@ -82,7 +84,7 @@ void setup(void)
         exit(EXIT_FAILURE);
     }
 
-    semid = semaphore_create(key);
+    semid = semaphore_create(key, 1);
     if (semid == -1)
     {
         log0("[!] Failed to create semaphore");
@@ -95,7 +97,24 @@ void setup(void)
         exit(EXIT_FAILURE);
     }
 
+    signal(SIGINT, cleanup);
+
     log0("Semaphore created and initialized");
+}
+
+void cleanup(int signum)
+{
+    (void)signum;
+
+    log0("================================================");
+    log0("<CTRL+C> received, cleaning up...");
+    log0("================================================");
+
+    semaphore_destroy(semid);
+
+    log0("Semaphore destroyed");
+
+    exit(EXIT_SUCCESS);
 }
 
 void loop(void)
@@ -116,7 +135,7 @@ void loop(void)
 
 void produce_random_order(order_t *order)
 {
-    order->type = rand_int(0, MENU_TYPE_COUNT);
+    order->type = (menu_type_t)(rand_int(0, MENU_TYPE_COUNT));
     order->wants_dessert = (rand_int(0, 100) < 50);
 }
 

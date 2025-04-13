@@ -16,6 +16,7 @@
 
 void setup(void);
 void loop(void);
+void cleanup(int signum);
 
 int semid;
 char *file_path;
@@ -79,14 +80,27 @@ void setup(void)
         exit(EXIT_FAILURE);
     }
 
-    semid = semaphore_create(key);
+    semid = semaphore_create(key, 0);
     if (semid == -1)
     {
         log0("[!] Failed to create semaphore");
         exit(EXIT_FAILURE);
     }
 
+    signal(SIGINT, cleanup);
+
     log0("Semaphore created");
+}
+
+void cleanup(int signum)
+{
+    (void)signum;
+
+    log0("================================================");
+    log0("<CTRL+C> received, cleaning up...");
+    log0("================================================");
+
+    exit(EXIT_SUCCESS);
 }
 
 void loop(void)

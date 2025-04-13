@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <sys/sem.h>
 
-int semaphore_create(key_t key)
+int semaphore_create(key_t key, int exclusive)
 {
-    return semget(key, 1, IPC_CREAT | 0666);
+    return semget(key, 1, IPC_CREAT | 0666 | (exclusive ? IPC_EXCL : 0));
 }
 
 int semaphore_init(int semid)
@@ -35,4 +35,9 @@ int semaphore_signal(int semid)
     op.sem_flg = 0;
 
     return semop(semid, &op, 1);
+}
+
+int semaphore_destroy(int semid)
+{
+    return semctl(semid, 0, IPC_RMID);
 }
