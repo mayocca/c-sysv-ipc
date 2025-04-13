@@ -105,7 +105,7 @@ void loop(void)
     /* Produce orders */
     produce_random_order(order);
 
-    log2("Produced order: %c %s", menu_type_to_char(order->type), order->wants_dessert ? "with dessert" : "without dessert");
+    log3("Produced order: (%c) %s %s", menu_type_to_char(order->type), menu_type_description(order->type), order->wants_dessert ? "con postre" : "sin postre");
 
     /* Write order to file */
     write_order_to_file(order);
