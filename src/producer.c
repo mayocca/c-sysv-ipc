@@ -111,7 +111,7 @@ void loop(void)
 
 void produce_random_order(order_t *order)
 {
-    order->type = rand_int(0, MENU_TYPE_COUNT - 1);
+    order->type = rand_int(0, MENU_TYPE_COUNT);
     order->wants_dessert = (rand_int(0, 100) < 50);
 }
 
