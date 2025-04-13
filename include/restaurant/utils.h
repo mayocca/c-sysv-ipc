@@ -1,6 +1,7 @@
 #ifndef __RESTAURANT_UTILS_H
 #define __RESTAURANT_UTILS_H
 
+#define DEFAULT_FILE_PATH "/tmp/menu.dat"
 #define DESSERT_PRICE 200
 
 typedef enum

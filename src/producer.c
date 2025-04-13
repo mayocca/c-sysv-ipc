@@ -12,6 +12,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define PRODUCE_INTERVAL 500000
+
 void setup(void);
 void loop(void);
 void produce_random_order(order_t *order);
@@ -41,11 +43,14 @@ int main(int argc, char *argv[])
     log0("Producer loop");
     log0("================================================");
 
+    log0("Waiting for 3 seconds...");
+    sleep(3);
+
     while (1)
     {
         loop();
 
-        sleep(2);
+        usleep(PRODUCE_INTERVAL);
     }
 
     return EXIT_SUCCESS;
@@ -57,12 +62,12 @@ void setup(void)
     key_t key;
 
     /* Get file path from environment */
-    file_path = env_get("FILE_PATH", "/tmp/menu.dat");
+    file_path = env_get("FILE_PATH", DEFAULT_FILE_PATH);
 
     /* Create file if it doesn't exist */
     if (file_open(file_path, "w") == NULL)
     {
-        log0("Failed to open file");
+        log0("[!] Failed to open file");
         exit(EXIT_FAILURE);
     }
 
@@ -73,20 +78,20 @@ void setup(void)
 
     if (key == -1)
     {
-        log0("Failed to create token");
+        log0("[!] Failed to create token");
         exit(EXIT_FAILURE);
     }
 
     semid = semaphore_create(key);
     if (semid == -1)
     {
-        log0("Failed to create semaphore");
+        log0("[!] Failed to create semaphore");
         exit(EXIT_FAILURE);
     }
 
     if (semaphore_init(semid) == -1)
     {
-        log0("Failed to initialize semaphore");
+        log0("[!] Failed to initialize semaphore");
         exit(EXIT_FAILURE);
     }
 
@@ -125,7 +130,7 @@ void write_order_to_file(order_t *order)
     file = file_open(file_path, "a");
     if (file == NULL)
     {
-        log0("Failed to open file");
+        log0("[!] Failed to open file");
         exit(EXIT_FAILURE);
     }
 

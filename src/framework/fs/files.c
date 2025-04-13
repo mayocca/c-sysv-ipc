@@ -1,5 +1,4 @@
 #include "framework/fs/files.h"
-#include "framework/utils/logging.h"
 
 FILE *file_open(const char *path, const char *mode)
 {
@@ -7,7 +6,6 @@ FILE *file_open(const char *path, const char *mode)
 
   if (file == NULL)
   {
-    log0("Failed to open file");
     return NULL;
   }
 
@@ -25,7 +23,6 @@ size_t file_write(FILE *file, const void *buffer, size_t size, size_t items)
 
   if (items_written != items)
   {
-    log0("Failed to write file");
     return 0;
   }
 
@@ -38,7 +35,6 @@ int file_close(FILE *file)
 
   if (status == EOF)
   {
-    log0("Failed to close file");
     return -1;
   }
 

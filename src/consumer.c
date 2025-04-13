@@ -12,7 +12,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define CHECK_INTERVAL 1
+#define CHECK_INTERVAL 100000
 
 void setup(void);
 void loop(void);
@@ -30,25 +30,30 @@ int main(int argc, char *argv[])
     }
 
     menu_type = menu_type_from_char(*argv[1]);
-    file_path = env_get("FILE_PATH", "/tmp/menu.dat");
+    file_path = env_get("FILE_PATH", DEFAULT_FILE_PATH);
 
     framework_init();
 
     log0("================================================");
-    log0("Consumer setup");
+    log0("Starting consumer setup");
     log0("================================================");
 
     setup();
 
     log0("================================================");
-    log0("Consumer loop");
+    log0("Starting consumer loop");
     log0("================================================");
+
+    log0("Waiting for 3 seconds...");
+    sleep(3);
 
     while (1)
     {
+        clear_screen();
+
         loop();
 
-        sleep(CHECK_INTERVAL);
+        usleep(CHECK_INTERVAL);
     }
 
     return EXIT_SUCCESS;
@@ -59,12 +64,9 @@ void setup(void)
     /* Variables */
     key_t key;
 
-    /* Get file path from environment */
-    file_path = env_get("FILE_PATH", "/tmp/menu.dat");
-
     while (file_open(file_path, "r") == NULL)
     {
-        log0("Waiting for file to be created. Run producer first or set FILE_PATH environment variable.");
+        log0("[!] Waiting for file to be created. Run producer first or set FILE_PATH environment variable.");
 
         sleep(3);
     }
@@ -73,24 +75,18 @@ void setup(void)
     key = token_create(file_path);
     if (key == -1)
     {
-        log0("Failed to create token");
+        log0("[!] Failed to create token");
         exit(EXIT_FAILURE);
     }
 
     semid = semaphore_create(key);
     if (semid == -1)
     {
-        log0("Failed to create semaphore");
+        log0("[!] Failed to create semaphore");
         exit(EXIT_FAILURE);
     }
 
-    if (semaphore_init(semid) == -1)
-    {
-        log0("Failed to initialize semaphore");
-        exit(EXIT_FAILURE);
-    }
-
-    log0("Semaphore created and initialized");
+    log0("Semaphore created");
 }
 
 void loop(void)
@@ -106,7 +102,7 @@ void loop(void)
     file = file_open(file_path, "r");
     if (file == NULL)
     {
-        log0("Failed to open file");
+        log0("[!] Failed to open file");
         exit(EXIT_FAILURE);
     }
 

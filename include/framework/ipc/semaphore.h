@@ -35,12 +35,4 @@ int semaphore_wait(int semid);
  */
 int semaphore_signal(int semid);
 
-/**
- * @brief Destroys a semaphore set
- *
- * @param semid   Semaphore set identifier
- * @return int    0 on success, -1 on error
- */
-int semaphore_destroy(int semid);
-
 #endif
