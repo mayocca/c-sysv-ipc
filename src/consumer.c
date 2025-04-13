@@ -80,11 +80,15 @@ void setup(void)
         exit(EXIT_FAILURE);
     }
 
-    semid = semaphore_create(key, 0);
-    if (semid == -1)
+    semid = semaphore_create(key, 0, 0);
+
+    while (semid == -1)
     {
-        log0("[!] Failed to create semaphore");
-        exit(EXIT_FAILURE);
+        log0("[!] Waiting for semaphore to be created. Run producer first or set FILE_PATH environment variable.");
+
+        sleep(3);
+
+        semid = semaphore_create(key, 0, 0);
     }
 
     signal(SIGINT, cleanup);

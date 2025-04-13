@@ -84,7 +84,7 @@ void setup(void)
         exit(EXIT_FAILURE);
     }
 
-    semid = semaphore_create(key, 1);
+    semid = semaphore_create(key, 1, 1);
     if (semid == -1)
     {
         log0("[!] Failed to create semaphore");

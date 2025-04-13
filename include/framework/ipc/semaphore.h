@@ -7,10 +7,11 @@
  * @brief Creates or gets a System V semaphore set
  *
  * @param key IPC key for the semaphore set (must be non-zero)
+ * @param create Whether to create the semaphore set if it doesn't exist
  * @param exclusive Whether to create the semaphore exclusively
  * @return int Semaphore ID on success, -1 on error
  */
-int semaphore_create(key_t key, int exclusive);
+int semaphore_create(key_t key, int create, int exclusive);
 
 /**
  * @brief Initializes a semaphore set

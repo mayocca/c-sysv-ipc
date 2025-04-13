@@ -5,9 +5,21 @@
 #include <stdio.h>
 #include <sys/sem.h>
 
-int semaphore_create(key_t key, int exclusive)
+int semaphore_create(key_t key, int create, int exclusive)
 {
-    return semget(key, 1, IPC_CREAT | 0666 | (exclusive ? IPC_EXCL : 0));
+    int flags = 0666;
+
+    if (create)
+    {
+        flags |= IPC_CREAT;
+    }
+
+    if (exclusive)
+    {
+        flags |= IPC_EXCL;
+    }
+
+    return semget(key, 1, flags);
 }
 
 int semaphore_init(int semid)
