@@ -14,7 +14,14 @@ FILE *file_open(const char *path, const char *mode)
 
 size_t file_read(FILE *file, void *buffer, size_t size, size_t items)
 {
-  return fread(buffer, size, items, file);
+  size_t items_read = fread(buffer, size, items, file);
+
+  if (items_read != items)
+  {
+    return 0;
+  }
+
+  return items_read;
 }
 
 size_t file_write(FILE *file, const void *buffer, size_t size, size_t items)
@@ -35,7 +42,7 @@ int file_close(FILE *file)
 
   if (status == EOF)
   {
-    return -1;
+    return EOF;
   }
 
   return 0;
