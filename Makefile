@@ -26,15 +26,15 @@ alquicor_dir := ./src/alquicor
 framework_srcs := $(shell find $(framework_dir) -type f -name '*.c')
 alquicor_srcs := $(shell find $(alquicor_dir) -type f -name '*.c')
 
-all: manager consumer
+all: manager client
 
 manager: $(src_dir)/manager.c $(framework_srcs) $(alquicor_srcs)
 	$(CC) $(CFLAGS) -o $@ $^
 
-consumer: $(src_dir)/consumer.c $(framework_srcs) $(alquicor_srcs)
+client: $(src_dir)/client.c $(framework_srcs) $(alquicor_srcs)
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	@rm -rf manager consumer
+	@rm -rf manager client
 
 .PHONY: all clean
