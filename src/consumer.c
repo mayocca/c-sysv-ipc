@@ -6,13 +6,14 @@
 #include "framework/utils/logging.h"
 #include "restaurant/utils.h"
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
 
-#define CHECK_INTERVAL 100000
+#define CHECK_INTERVAL 1
 
 void setup(void);
 void loop(void);
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 
         loop();
 
-        usleep(CHECK_INTERVAL);
+        sleep(CHECK_INTERVAL);
     }
 
     return EXIT_SUCCESS;
@@ -124,7 +125,7 @@ void loop(void)
         exit(EXIT_FAILURE);
     }
 
-    while (file_read(file, order, sizeof(order_t), 1) == 1)
+    while (file_read(file, order, sizeof(order_t), (size_t)1) == 1)
     {
         if (order->type == menu_type)
         {

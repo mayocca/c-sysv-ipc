@@ -8,17 +8,15 @@ CFLAGS := -ansi \
          -Wconversion \
          -Wformat \
          -Wformat-security \
-         -Wimplicit-fallthrough \
          -Wmissing-declarations \
          -Wmissing-prototypes \
-         -Wnull-dereference \
          -Wpointer-arith \
          -Wredundant-decls \
          -Wshadow \
          -Wstrict-prototypes \
          -Wuninitialized \
-         -D_SVID_SOURCE \
          -I./include \
+         -D_XOPEN_SOURCE \
          -O3
 
 src_dir := ./src

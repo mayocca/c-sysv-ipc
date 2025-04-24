@@ -7,12 +7,13 @@
 #include "framework/utils/rand.h"
 #include "restaurant/utils.h"
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#define PRODUCE_INTERVAL 500000
+#define PRODUCE_INTERVAL 1
 
 void setup(void);
 void loop(void);
@@ -52,7 +53,7 @@ int main(int argc, char *argv[])
     {
         loop();
 
-        usleep(PRODUCE_INTERVAL);
+        sleep(PRODUCE_INTERVAL);
     }
 
     return EXIT_SUCCESS;
@@ -153,7 +154,7 @@ void write_order_to_file(order_t *order)
         exit(EXIT_FAILURE);
     }
 
-    file_write(file, order, sizeof(order_t), 1);
+    file_write(file, order, sizeof(order_t), (size_t)1);
     file_close(file);
 
     /* Signal semaphore */

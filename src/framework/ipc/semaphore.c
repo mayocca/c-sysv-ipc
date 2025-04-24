@@ -35,7 +35,7 @@ int semaphore_wait(int semid)
     op.sem_op = -1;
     op.sem_flg = 0;
 
-    return semop(semid, &op, 1);
+    return semop(semid, &op, (size_t)1);
 }
 
 int semaphore_signal(int semid)
@@ -46,7 +46,7 @@ int semaphore_signal(int semid)
     op.sem_op = 1;
     op.sem_flg = 0;
 
-    return semop(semid, &op, 1);
+    return semop(semid, &op, (size_t)1);
 }
 
 int semaphore_destroy(int semid)
