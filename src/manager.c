@@ -184,7 +184,7 @@ void loop(void)
         get_property_by_id(&property, request.property_id);
         if (property.reserved == 0)
         {
-            log2("Property %s requested by %s. Marking as reserved", property.name, request.buyer_last_name);
+            log3("Property %s requested by %s (DNI: %d). Marking as reserved", property.name, request.buyer_last_name, request.buyer_dni);
             set_property_reserved(property.id, 1);
             request_count++;
         }

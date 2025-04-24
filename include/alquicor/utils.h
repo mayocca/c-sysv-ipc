@@ -26,8 +26,8 @@ typedef struct
 {
     /* Property ID */
     int property_id;
-    /* Buyer ID */
-    int buyer_id;
+    /* Buyer DNI */
+    int buyer_dni;
     /* Buyer last name */
     char buyer_last_name[MAX_BUYER_LAST_NAME_LENGTH];
 } request_t;

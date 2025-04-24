@@ -166,6 +166,10 @@ void loop(void)
     request.property_id = io_read_int();
     io_clear_buffer();
 
+    log0("Enter your DNI");
+    request.buyer_dni = io_read_int();
+    io_clear_buffer();
+
     log0("Enter your last name");
     io_read_line(request.buyer_last_name, MAX_BUYER_LAST_NAME_LENGTH);
 
