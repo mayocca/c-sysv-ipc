@@ -10,5 +10,5 @@ void rand_init(void)
 
 int rand_int(int min, int max)
 {
-    return min + rand() % (max - min);
+    return min + rand() % (max - min + 1);
 }

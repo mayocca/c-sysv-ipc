@@ -9,10 +9,10 @@
 void rand_init(void);
 
 /**
- * @brief Generate a random integer between min and max
+ * @brief Generate a random integer between min and max (inclusive)
  *
- * @param min Minimum value (inclusive)
- * @param max Maximum value (exclusive)
+ * @param min Minimum value
+ * @param max Maximum value
  *
  * @return int Random integer between min and max
  */

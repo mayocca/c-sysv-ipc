@@ -21,20 +21,20 @@ CFLAGS := -ansi \
 
 src_dir := ./src
 framework_dir := ./src/framework
-restaurant_dir := ./src/restaurant
+alquicor_dir := ./src/alquicor
 
 framework_srcs := $(shell find $(framework_dir) -type f -name '*.c')
-restaurant_srcs := $(shell find $(restaurant_dir) -type f -name '*.c')
+alquicor_srcs := $(shell find $(alquicor_dir) -type f -name '*.c')
 
-all: producer consumer
+all: manager consumer
 
-producer: $(src_dir)/producer.c $(framework_srcs) $(restaurant_srcs)
+manager: $(src_dir)/manager.c $(framework_srcs) $(alquicor_srcs)
 	$(CC) $(CFLAGS) -o $@ $^
 
-consumer: $(src_dir)/consumer.c $(framework_srcs) $(restaurant_srcs)
+consumer: $(src_dir)/consumer.c $(framework_srcs) $(alquicor_srcs)
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	@rm -rf producer consumer
+	@rm -rf manager consumer
 
 .PHONY: all clean

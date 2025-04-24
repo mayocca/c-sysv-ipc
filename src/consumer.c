@@ -4,7 +4,7 @@
 #include "framework/ipc/tokens.h"
 #include "framework/os/env.h"
 #include "framework/utils/logging.h"
-#include "restaurant/utils.h"
+#include "alquicor/utils.h"
 
 #include <signal.h>
 #include <stdio.h>
