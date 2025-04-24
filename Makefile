@@ -16,7 +16,7 @@ CFLAGS := -ansi \
          -Wstrict-prototypes \
          -Wuninitialized \
          -I./include \
-         -D_XOPEN_SOURCE \
+         -D_XOPEN_SOURCE=500 \
          -O3
 
 src_dir := ./src
