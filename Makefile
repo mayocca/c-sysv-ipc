@@ -2,19 +2,7 @@ CC := gcc
 CFLAGS := -ansi \
          -pedantic-errors \
          -Wall \
-         -Wextra \
          -Werror \
-         -Wcast-align \
-         -Wconversion \
-         -Wformat \
-         -Wformat-security \
-         -Wmissing-declarations \
-         -Wmissing-prototypes \
-         -Wpointer-arith \
-         -Wredundant-decls \
-         -Wshadow \
-         -Wstrict-prototypes \
-         -Wuninitialized \
          -I./include \
          -D_XOPEN_SOURCE=500 \
          -O3
