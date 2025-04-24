@@ -188,9 +188,13 @@ void loop(void)
             set_property_reserved(property.id, 1);
             request_count++;
         }
-        else
+        else if (property.reserved == 1)
         {
             log1("Property %s already reserved, skipping", property.name);
+        }
+        else
+        {
+            log0("Property does not exist");
         }
     }
 
