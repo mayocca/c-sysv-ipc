@@ -11,8 +11,8 @@ src_dir := ./src
 framework_dir := ./src/framework
 alquicor_dir := ./src/alquicor
 
-framework_srcs := $(shell find $(framework_dir) -type f -name '*.c')
-alquicor_srcs := $(shell find $(alquicor_dir) -type f -name '*.c')
+framework_srcs := $(shell find $(framework_dir) -type f -name '*.c' ! -name '._*')
+alquicor_srcs := $(shell find $(alquicor_dir) -type f -name '*.c' ! -name '._*')
 
 all: manager client
 
