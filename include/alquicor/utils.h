@@ -8,6 +8,7 @@
 #define SQUARE_METER_PRICE 2000
 #define MAX_PROPERTY_NAME_LENGTH 100
 #define MAX_BUYER_LAST_NAME_LENGTH 30
+#define PROPERTY_COUNT 4
 
 typedef struct
 {
@@ -30,5 +31,13 @@ typedef struct
     /* Buyer last name */
     char buyer_last_name[MAX_BUYER_LAST_NAME_LENGTH];
 } request_t;
+
+/**
+ * @brief Get the price of a property
+ *
+ * @param property The property to get the price of
+ * @return int The price of the property
+ */
+int property_get_price(property_t *property);
 
 #endif

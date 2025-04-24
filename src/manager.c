@@ -3,6 +3,7 @@
 #include "framework/os/env.h"
 #include "framework/ipc/semaphore.h"
 #include "framework/ipc/tokens.h"
+#include "framework/utils/io.h"
 #include "framework/utils/logging.h"
 #include "framework/utils/rand.h"
 #include "alquicor/utils.h"
@@ -20,13 +21,14 @@ void setup(void);
 void loop(void);
 void cleanup(int signum);
 void seed_properties(void);
-property_t *get_property_by_id(int id);
+void get_property_by_id(property_t *property, int id);
 void set_property_reserved(int id, int reserved);
 
 int properties_semid;
 int requests_semid;
 char *alquicor_properties_path;
 char *alquicor_requests_path;
+int loop_count = 0;
 
 int main(int argc, char *argv[])
 {
@@ -55,6 +57,8 @@ int main(int argc, char *argv[])
     while (1)
     {
         loop();
+
+        loop_count++;
 
         sleep(CHECK_INTERVAL);
     }
@@ -136,7 +140,9 @@ void setup(void)
     seed_properties();
     log0("Properties seeded");
 
+    log0("================================================");
     log0("Manager setup complete");
+    log0("================================================");
 }
 
 void cleanup(int signum)
@@ -159,13 +165,11 @@ void loop(void)
 {
     int request_count = 0;
     request_t request;
-    property_t *property;
+    property_t property;
     FILE *requests_file;
 
     semaphore_wait(requests_semid);
-    semaphore_wait(properties_semid);
 
-    /* Read requests from file */
     requests_file = file_open(alquicor_requests_path, "r");
     if (requests_file == NULL)
     {
@@ -173,37 +177,50 @@ void loop(void)
         exit(EXIT_FAILURE);
     }
 
+    /* Process requests */
     while (file_read(requests_file, &request, sizeof(request_t), (size_t)1) == 1)
     {
-        property = get_property_by_id(request.property_id);
-        if (property != NULL && property->reserved == 0)
+        log2("Processing request: %d, %s", request.property_id, request.buyer_last_name);
+        get_property_by_id(&property, request.property_id);
+        if (property.reserved == 0)
         {
-            log2("Property %s requested by %s. Marking as reserved", property->name, request.buyer_last_name);
-            set_property_reserved(property->id, 1);
+            log2("Property %s requested by %s. Marking as reserved", property.name, request.buyer_last_name);
+            set_property_reserved(property.id, 1);
             request_count++;
         }
         else
         {
-            log1("Property %s already reserved, skipping", property->name);
+            log1("Property %s already reserved, skipping", property.name);
         }
     }
 
     file_close(requests_file);
-    semaphore_signal(requests_semid);
-    semaphore_signal(properties_semid);
 
-    log1("Requests processed: %d", request_count);
+    /* Clear requests file */
+    requests_file = file_open(alquicor_requests_path, "w");
+    if (requests_file == NULL)
+    {
+        log0("[!] Failed to open requests file");
+        exit(EXIT_FAILURE);
+    }
+
+    file_close(requests_file);
+
+    semaphore_signal(requests_semid);
+
+    /** Log every 10 loops or if requests were processed */
+    if (loop_count % 10 == 0 || request_count > 0)
+    {
+        log1("Requests processed: %d", request_count);
+    }
 }
 
-property_t *get_property_by_id(int id)
+void get_property_by_id(property_t *property, int id)
 {
-    property_t property;
-    property_t *found_property = NULL;
+    property_t p;
     FILE *properties_file;
 
-    /* Wait for semaphore */
     semaphore_wait(properties_semid);
-
     properties_file = file_open(alquicor_properties_path, "r");
     if (properties_file == NULL)
     {
@@ -211,12 +228,11 @@ property_t *get_property_by_id(int id)
         exit(EXIT_FAILURE);
     }
 
-    while (file_read(properties_file, &property, sizeof(property_t), (size_t)1) == 1)
+    while (file_read(properties_file, &p, sizeof(property_t), (size_t)1) == 1)
     {
-        if (property.id == id)
+        if (p.id == id)
         {
-            found_property = malloc(sizeof(property_t));
-            memcpy(found_property, &property, sizeof(property_t));
+            memcpy(property, &p, sizeof(property_t));
 
             break;
         }
@@ -224,15 +240,17 @@ property_t *get_property_by_id(int id)
 
     file_close(properties_file);
     semaphore_signal(properties_semid);
-
-    return found_property;
 }
 
 void set_property_reserved(int id, int reserved)
 {
-    property_t property;
+    property_t *properties;
+    int i;
     FILE *properties_file;
 
+    properties = malloc(sizeof(property_t) * PROPERTY_COUNT);
+
+    semaphore_wait(properties_semid);
     properties_file = file_open(alquicor_properties_path, "r+");
     if (properties_file == NULL)
     {
@@ -240,26 +258,39 @@ void set_property_reserved(int id, int reserved)
         exit(EXIT_FAILURE);
     }
 
-    while (file_read(properties_file, &property, sizeof(property_t), (size_t)1) == 1)
+    file_read(properties_file, properties, sizeof(property_t), PROPERTY_COUNT);
+
+    for (i = 0; i < PROPERTY_COUNT; i++)
     {
-        if (property.id == id)
+        if (properties[i].id == id)
         {
-            property.reserved = reserved;
+            properties[i].reserved = reserved;
             break;
         }
     }
-
-    file_write(properties_file, &property, sizeof(property_t), (size_t)1);
     file_close(properties_file);
+
+    properties_file = file_open(alquicor_properties_path, "w");
+    if (properties_file == NULL)
+    {
+        log0("[!] Failed to open properties file");
+        exit(EXIT_FAILURE);
+    }
+
+    file_write(properties_file, properties, sizeof(property_t), PROPERTY_COUNT);
+    file_close(properties_file);
+
+    semaphore_signal(properties_semid);
+
+    free(properties);
 }
 
-/* Seeds 4 properties */
+/* Seeds properties */
 void seed_properties(void)
 {
-    property_t properties[4];
+    property_t properties[PROPERTY_COUNT];
     FILE *properties_file;
     int i = 0;
-    char *property_name;
 
     semaphore_wait(properties_semid);
 
@@ -270,19 +301,19 @@ void seed_properties(void)
         exit(EXIT_FAILURE);
     }
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < PROPERTY_COUNT; i++)
     {
-        property_name = malloc(MAX_PROPERTY_NAME_LENGTH);
-        memset(property_name, 0, MAX_PROPERTY_NAME_LENGTH);
-        sprintf(property_name, "Property %d", i + 1);
+        log1("Enter the ID of property %d", i + 1);
+        properties[i].id = io_read_int();
+        io_clear_buffer();
 
-        properties[i].id = i;
+        log1("Enter the name of property %d", i + 1);
+        io_read_line(properties[i].name, MAX_PROPERTY_NAME_LENGTH);
         properties[i].reserved = 0;
         properties[i].square_meters = rand_int(20, 100);
-        memcpy(properties[i].name, property_name, MAX_PROPERTY_NAME_LENGTH);
     }
 
-    file_write(properties_file, properties, sizeof(property_t), 4);
+    file_write(properties_file, properties, sizeof(property_t), PROPERTY_COUNT);
     file_close(properties_file);
 
     semaphore_signal(properties_semid);

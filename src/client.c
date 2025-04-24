@@ -3,6 +3,7 @@
 #include "framework/ipc/semaphore.h"
 #include "framework/ipc/tokens.h"
 #include "framework/os/env.h"
+#include "framework/utils/io.h"
 #include "framework/utils/logging.h"
 #include "alquicor/utils.h"
 
@@ -13,7 +14,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define CHECK_INTERVAL 1
+#define CHECK_INTERVAL 3
 
 void setup(void);
 void loop(void);
@@ -44,7 +45,7 @@ int main(int argc, char *argv[])
     log0("Starting client loop");
     log0("================================================");
 
-    log0("Waiting for 3 seconds...");
+    log0("Waiting for manager to start...");
     sleep(3);
 
     while (1)
@@ -123,5 +124,66 @@ void cleanup(int signum)
 
 void loop(void)
 {
-    log0("Client loop");
+    /* Variables */
+    property_t property;
+    request_t request;
+    FILE *properties_file;
+    FILE *requests_file;
+
+    /* Wait for semaphore */
+    semaphore_wait(properties_semid);
+
+    /* Read properties from file */
+    properties_file = file_open(alquicor_properties_path, "r");
+    if (properties_file == NULL)
+    {
+        log0("[!] Failed to open properties file");
+        exit(EXIT_FAILURE);
+    }
+
+    log0("Available properties:");
+
+    while (file_read(properties_file, &property, sizeof(property_t), (size_t)1) == 1)
+    {
+        if (property.reserved == 0)
+        {
+            log4("-> ID: %d, Name: %s, Square meters: %d, Price: $%d", property.id, property.name, property.square_meters, property_get_price(&property));
+        }
+        else
+        {
+            log4("-> (SOLD) ID: %d, Name: %s, Square meters: %d, Price: $%d", property.id, property.name, property.square_meters, property_get_price(&property));
+        }
+    }
+
+    file_close(properties_file);
+    semaphore_signal(properties_semid);
+
+    log0("");
+    log0("------------------------------------------------");
+    log0("");
+    log0("Enter the ID of the property you want to request");
+
+    request.property_id = io_read_int();
+    io_clear_buffer();
+
+    log0("Enter your last name");
+    io_read_line(request.buyer_last_name, MAX_BUYER_LAST_NAME_LENGTH);
+
+    log2("Request: %d, %s", request.property_id, request.buyer_last_name);
+
+    semaphore_wait(requests_semid);
+
+    requests_file = file_open(alquicor_requests_path, "a");
+    if (requests_file == NULL)
+    {
+        log0("[!] Failed to open requests file");
+        exit(EXIT_FAILURE);
+    }
+
+    log0("Writing request to file");
+
+    file_write(requests_file, &request, sizeof(request_t), (size_t)1);
+    file_close(requests_file);
+
+    semaphore_signal(requests_semid);
 }
