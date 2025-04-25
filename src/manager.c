@@ -111,7 +111,7 @@ void setup(void)
     properties_semid = semaphore_create(properties_key, 1, 1);
     if (properties_semid == -1)
     {
-        log0("[!] Failed to create semaphore for properties");
+        log0("[!] Failed to create semaphore for properties. Is another manager running?");
         exit(EXIT_FAILURE);
     }
 
@@ -124,7 +124,7 @@ void setup(void)
     requests_semid = semaphore_create(requests_key, 1, 1);
     if (requests_semid == -1)
     {
-        log0("[!] Failed to create semaphore for requests");
+        log0("[!] Failed to create semaphore for requests. Is another manager running?");
         exit(EXIT_FAILURE);
     }
 
