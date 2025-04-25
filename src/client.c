@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     log0("Starting client loop");
     log0("================================================");
 
-    log0("Waiting for manager to start...");
+    log0("Waiting for manager to finish properties setup...");
     sleep(3);
 
     while (1)
